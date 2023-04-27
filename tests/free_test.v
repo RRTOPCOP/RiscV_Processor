@@ -6,6 +6,7 @@ initial begin
   data = 4'b0011;
 
   $display(data);
+  $display("hello");
 end
 
 endmodule
