@@ -38,7 +38,7 @@ module alu_test;
 
   initial begin 
     i = 0;
-    dataA = 12;
+    dataA = 10;
     dataB = 10;
     ans[0] = dataA + dataB;
     ans[1] = dataA - dataB;

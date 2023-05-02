@@ -30,12 +30,12 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
   assign imm = immidiate(opcode, instruction);
   assign reg_write = regwrite(opcode);
   assign alu_src = alusrc(opcode);
-  assign jump = (opcode == 1101111); //jal
+  assign jump = (opcode == 7'b1101111); //jal
   assign mem_to_reg = memtoreg(opcode);
   assign mem_read = memread(opcode);
   assign mem_write = memwrite(opcode);
-  assign branch = (opcode == 1100011); //Bformat only
-  assign jalr = (opcode == 1100111);
+  assign branch = (opcode == 7'b1100011); //Bformat only
+  assign jalr = (opcode == 7'b1100111);
 
 
 
@@ -47,15 +47,16 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
 
   case(opcode)
     //Iformat
-    7'b0000011,
-    7'b0010011,
-    7'b1100111: immidiate = instruction[31:20];
+    7'b0000011,                                     //lw
+    7'b0010011,                                     //immidiate
+    7'b1100111,                                     //jalr
+    7'b1101111: immidiate = $signed(instruction[31:20]);     //jal
     //Uformat
     7'b0110111,
     7'b0010111: immidiate = {instruction[31:12], 12'b0};
     //Bformat,Sformat
     7'b0100011,
-    7'b1100011: immidiate = {instruction[31:25], instruction[11:7]};
+    7'b1100011: immidiate = $signed({instruction[31:25], instruction[11:7]});
 
   endcase
 
@@ -107,11 +108,11 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
 
       7'b0110111,                     //Uformat(lui)
       7'b0010111: alu_ctr = 3'b111;   //Uformat(auipc)
-
       7'b1100011: alu_ctr = 3'b001; //Bformat
-
       7'b1101111,                     //jal
       7'b1100111: alu_ctr = 3'b000;   //jalr
+      7'b0000011,                     //lw
+      7'b0100011: alu_ctr = 3'b000;   //sw
 
 
 
@@ -146,6 +147,7 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
 
     case(opcode)
     7'b0100011,                 //Sformat
+    7'b0010011,                 //Iformat(immidiate)
     7'b0000011: alusrc = 1;     //Iformat(lw)
     default: alusrc = 0;
     endcase

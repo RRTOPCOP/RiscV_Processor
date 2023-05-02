@@ -29,7 +29,8 @@ output [1:0] SIZE; // data width
 output  IACK_n; // processor status (ok -> 1)                    
 
 
-assign DDT = ddt(opcode, mem_data, reg_data2);
+assign DDT = reg_data2;
+assign mem_data = DDT;
 assign IAD = pc_out_data;
 assign DAD = alu_out_data;
 assign MREQ = mem_read;
@@ -39,22 +40,6 @@ assign SIZE = size(funct3);
 
 
 
-//function for DDT
-function [31:0] ddt;
-
-input [6:0] opcode;
-input [31:0] mem_data;
-input [31:0] reg_data2;
-
-case(opcode)
-  //lw
-  7'b0000011: ddt = mem_data;
-  //sw
-  7'b0100011: ddt = reg_data2;
-  default: ddt = 32'bx;
-endcase
-
-endfunction
 
 //function for SIZE
 function [1:0] size;
@@ -165,7 +150,7 @@ mux_alu u_mux_alu (
 //alu
 alu u_alu (
   .dataA(reg_data1),
-  .dataB(reg_data2),
+  .dataB(muxAlu_out_data),
   .alu_op(alu_op),
   .alu_out_data(alu_out_data),
   .zero(zero),
@@ -217,7 +202,7 @@ src_mem u_src_mem (
 rf32x32 register (
   .clk(clk),
   .reset(rst),
-  .wr_n(reg_write),
+  .wr_n(~reg_write),
   .rd1_addr(rs1),
   .rd2_addr(rs2),
   .wr_addr(rd),

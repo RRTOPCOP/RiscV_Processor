@@ -5,7 +5,7 @@ module alu (dataA, dataB, alu_op, alu_out_data, zero, overflow, u_slt, s_slt);
   output  zero, overflow, u_slt, s_slt;
 
   assign alu_out_data = result(dataA, dataB, alu_op);
-  assign zero = (alu_out_data == 0);
+  assign zero = (alu_out_data == 32'b0);
   assign overflow = ((dataA[31] == dataB[31])&&(alu_out_data[31] != dataA[31]));
   assign u_slt = ((alu_op == 3'b001)&&(dataA < dataB));
   assign s_slt = (alu_op == 3'b001)&&((dataA[31] == dataB[31]) ? u_slt : ~u_slt);

@@ -1,12 +1,15 @@
 module free;
 
-reg [3:0] data;
+wire [5:0] line;
+wire [2:0] line2;
+
+assign line = 6'b000111;
+assign line2 = line[2:0];
 
 initial begin 
-  data = 4'b0011;
 
-  $display(data);
-  $display("hello");
+  $display("%b", line2);
+  
 end
 
 endmodule
