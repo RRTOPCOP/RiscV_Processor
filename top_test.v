@@ -35,6 +35,13 @@ module top_test;
    wire [1:0]           SIZE;
    wire                 IACK_n;
    wire [BIT_WIDTH-1:0] DDT;
+   //register numbers
+   wire [BIT_WIDTH-1:0] a5;
+   wire [BIT_WIDTH-1:0] a4;
+   wire [BIT_WIDTH-1:0] sp;
+   assign a5 =  u_top_1.register.u_DW_ram_2r_w_s_dff.mem[31+32*15:32*15];
+   assign a4 =  u_top_1.register.u_DW_ram_2r_w_s_dff.mem[31+32*14:32*14];
+   assign sp =  u_top_1.register.u_DW_ram_2r_w_s_dff.mem[31+32*2:32*2];
 
    integer              i;
    integer              CIL, CDLL, CDSL;  // counter for emulate memory access latency
@@ -109,7 +116,7 @@ module top_test;
 
         $display("\nReach IN_TOTAL.");
 
-      //   dump_task1;
+         // dump_task1;
 
         $finish;
 
@@ -117,11 +124,11 @@ module top_test;
 
    //*** description for wave form ***//
    initial begin
-      $monitor($stime," PC=%h INST=%b sp = %h ra = %h", IAD, IDT, u_top_1.register.u_DW_ram_2r_w_s_dff.mem[95:64], u_top_1.register.u_DW_ram_2r_w_s_dff.mem[63:32]);
+      $monitor($stime," PC=%h INST=%b a5=%h a4=%h", IAD, IDT, a5, a4);
       //ここから2行はIcarus Verilog用(手元で動かすときに使ってください)
 	   $dumpfile("top_test.vcd");
       $dumpvars(0, u_top_1);
-	  //ここから2行はNC-Verilog用(woodblockで動かすときに使ってください)
+	//   ここから2行はNC-Verilog用(woodblockで動かすときに使ってください)
       //$shm_open("waves.shm");
       //$shm_probe("AS");
    end

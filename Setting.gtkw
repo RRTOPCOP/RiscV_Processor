@@ -1,0 +1,34 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Tue May 09 05:34:16 2023
+[*]
+[dumpfile] "C:\Users\genta\Riscv_Processor\top_test.vcd"
+[dumpfile_mtime] "Tue May 09 05:25:48 2023"
+[dumpfile_size] 96177
+[savefile] "C:\Users\genta\Riscv_Processor\Setting.gtkw"
+[timestart] 0
+[size] 1280 697
+[pos] -35 -35
+*-15.000000 49900 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top_test.
+[sst_width] 197
+[signals_width] 229
+[sst_expanded] 1
+[sst_vpaned_height] 187
+@28
+top_test.u_top_1.clk
+top_test.u_top_1.rst
+@22
+top_test.u_top_1.IAD[31:0]
+@28
+top_test.u_top_1.mem_write
+@22
+top_test.u_top_1.reg_data2[31:0]
+top_test.u_top_1.DDT[31:0]
+top_test.u_top_1.DAD[31:0]
+@28
+top_test.u_top_1.MREQ
+@29
+top_test.u_top_1.WRITE
+[pattern_trace] 1
+[pattern_trace] 0

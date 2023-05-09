@@ -1,4 +1,4 @@
-module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, reg_write, alu_src, jump, mem_to_reg, mem_read, mem_write, branch, jalr);
+module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, reg_write, alu_src, jump, mem_to_reg, mem_read, mem_write, branch, jalr, isload);
   input [31:0] instruction;
   output [6:0] opcode;
   output [2:0] funct3;
@@ -16,6 +16,7 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
   output  mem_write; // whether write in memory
   output  branch; //is true when Bformat
   output  jalr; // is true when jalr
+  output  isload; //is true when lw
 
 //field
   assign opcode = instruction[6:0];
@@ -36,6 +37,7 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
   assign mem_write = memwrite(opcode);
   assign branch = (opcode == 7'b1100011); //Bformat only
   assign jalr = (opcode == 7'b1100111);
+  assign isload = (opcode == 7'b0000011);
 
 
 

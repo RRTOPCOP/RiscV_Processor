@@ -29,11 +29,11 @@ output [1:0] SIZE; // data width
 output  IACK_n; // processor status (ok -> 1)                    
 
 
-assign DDT = reg_data2;
-assign mem_data = DDT;
+assign DDT = reg_data2; //write in mem
+assign mem_data = DDT; //write in register from mem
 assign IAD = pc_out_data;
 assign DAD = alu_out_data;
-assign MREQ = mem_read;
+assign MREQ = mem_read || mem_write;
 assign WRITE = mem_write;
 assign IACK_n = 1;
 assign SIZE = size(funct3);
@@ -77,6 +77,7 @@ wire [31:0] order_data; //order_mem to decoder
   wire  mem_write;
   wire  branch;
   wire  jalr;
+  wire  isload;
 wire [31:0] plusFour_out_data; //adder_pcPlusFour to mux_pcsrc, src_mem
 wire [31:0] plusOffset_out_data; //adder_pcPlusOffset to mux_pcsrc, src_mem
 wire [31:0] reg_data1; //register to alu
@@ -102,7 +103,8 @@ pc u_pc (
   .pc_in_data(pc_in_data),
   .clk(clk),
   .rst(rst),
-  .pc_out_data(pc_out_data)
+  .pc_out_data(pc_out_data),
+  .isload(isload)
 );
 
 //decoder
@@ -123,7 +125,8 @@ decoder u_decoder (
   .mem_read(mem_read),
   .mem_write(mem_write),
   .branch(branch),
-  .jalr(jalr)
+  .jalr(jalr),
+  .isload(isload)
 );
 
 //adder_pcPlusFour
@@ -200,7 +203,7 @@ src_mem u_src_mem (
 
 //register
 rf32x32 register (
-  .clk(clk),
+  .clk(~clk),
   .reset(rst),
   .wr_n(~reg_write),
   .rd1_addr(rs1),
