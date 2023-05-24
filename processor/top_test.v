@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 `define IN_TOTAL 1000000000
-`include "top.v"
+`include "top_single.v"
 
 module top_test;
    
