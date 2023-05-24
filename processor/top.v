@@ -28,15 +28,31 @@ output  IACK_n; // processor status (ok -> 1)
 
 
 always @(posedge clk) begin
-  //IF
-  u_if_stage.pc_in_data <= u_ex.pc_in_data;
-  //IF to IFID
+  //to IFID
   u_ifid.order_data <= u_if_stage.order_data;
   u_ifid.pc_out_data <= u_if_stage.pc_out_data;
   u_ifid.plusFour_out_data <= u_if_stage.plusFour_out_data;
-  //IFID to ID
-  u_id.order_data <= u_ifid.order_data;
-  u_id.srcMem_out_data <= u_wb.srcMem_out_data;
+  //to IDEX
+  u_idex.pc_out_data <= u_ifid.pc_out_data;
+  u_idex.plusFour_out_data <= u_ifid.plusFour_out_data;
+  u_idex.reg_data1 <= u_id.reg_data1;
+  u_idex.reg_data2 <= u_id.reg_data2;
+  u_idex.imm <= u_id.imm;
+  u_idex.opcode <= u_id.opcode;
+  u_idex.funct3 <= u_id.funct3;
+  u_idex.alu_op <= u_id.alu_op;
+  u_idex.alu_src <= u_id.alu_src;
+  u_idex.jump <= u_id.jump;
+  u_idex.mem_to_reg <= u_id.mem_to_reg;
+  u_idex.mem_read <= u_id.mem_read;
+  u_idex.mem_write <= u_id.mem_write;
+  u_idex.branch <= u_id.branch;
+  u_idex.jalr <= u_id.jalr;
+  //to EXMEM
+  u_exmem.reg_data2 <= u_idex.reg_data2;
+
+
+
   
 
   
@@ -114,7 +130,7 @@ wire [31:0] srcMem_out_data; // src_mem to register
 if_stage u_if_stage(
   .clk(clk),
   .rst(rst),
-  .pc_in_data(pc_in_data),
+  .pc_in_data(u_exmem.pc_in_data),
   .plusFour_out_data(plusFour_out_data),
   .order_data(order_data),
   .pc_out_data(pc_out_data)
@@ -123,7 +139,7 @@ if_stage u_if_stage(
 //IFID
 ifid u_ifid(
   .order_data(order_data),
-  .pc_out_data(plusFour_out_data),
+  .pc_out_data(if.pc_out_data),
   .plusFour_out_data(plusFour_out_data)
 );
 
@@ -150,7 +166,7 @@ id u_id(
 
 //IDEX
 idex u_idex(
-  .pc_out_data(pc_out_data),
+  .pc_out_data(u_ifid.pc_out_data),
   .plusFour_out_data(plusFour_out_data),
   .reg_data1(reg_data1),
   .reg_data2(reg_data2),
@@ -198,6 +214,8 @@ exmem u_exmem(
   .plusFour_out_data(plusFour_out_data),
   .alu_out_data(alu_out_data),
   .plusOffset_out_data(plusOffset_out_data)
+  .pc_in_data(pc_in_data),
+  .pc_out_data(pc_out_data)
 );
 
 //MEMWB
@@ -208,7 +226,8 @@ memwb u_memwb(
   .alu_out_data(alu_out_data),
   .imm(imm),
   .plusFour_out_data(plusFour_out_data),
-  .mem_data(mem_data)
+  .mem_data(mem_data),
+  .pc_out_data(pc_out_data)
 );
 
 //WB
