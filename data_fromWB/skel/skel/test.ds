@@ -1,0 +1,53 @@
+
+test.lo:     file format elf32-littleriscv
+
+
+Disassembly of section .text:
+
+00010000 <_start>:
+   10000:	08030137          	lui	sp,0x8030
+   10004:	010000ef          	jal	ra,10014 <main>
+   10008:	ff0002b7          	lui	t0,0xff000
+   1000c:	00028023          	sb	zero,0(t0) # ff000000 <__bss_end+0xf6ff0000>
+
+00010010 <FOREVER_LOOP>:
+   10010:	0000006f          	j	10010 <FOREVER_LOOP>
+
+00010014 <main>:
+   10014:	ff010113          	addi	sp,sp,-16 # 802fff0 <__bss_end+0x1fff0>
+   10018:	00812623          	sw	s0,12(sp)
+   1001c:	01010413          	addi	s0,sp,16
+   10020:	ff0007b7          	lui	a5,0xff000
+   10024:	0007a023          	sw	zero,0(a5) # ff000000 <__bss_end+0xf6ff0000>
+   10028:	00000793          	li	a5,0
+   1002c:	00078513          	mv	a0,a5
+   10030:	00c12403          	lw	s0,12(sp)
+   10034:	01010113          	addi	sp,sp,16
+   10038:	00008067          	ret
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	3a434347          	.4byte	0x3a434347
+   4:	2820                	.2byte	0x2820
+   6:	31202967          	.4byte	0x31202967
+   a:	2e32                	.2byte	0x2e32
+   c:	2e32                	.2byte	0x2e32
+   e:	0030                	.2byte	0x30
+
+Disassembly of section .riscv.attributes:
+
+00000000 <.riscv.attributes>:
+   0:	1b41                	.2byte	0x1b41
+   2:	0000                	.2byte	0x0
+   4:	7200                	.2byte	0x7200
+   6:	7369                	.2byte	0x7369
+   8:	01007663          	bgeu	zero,a6,14 <_start-0xffec>
+   c:	0011                	.2byte	0x11
+   e:	0000                	.2byte	0x0
+  10:	1004                	.2byte	0x1004
+  12:	7205                	.2byte	0x7205
+  14:	3376                	.2byte	0x3376
+  16:	6932                	.2byte	0x6932
+  18:	7032                	.2byte	0x7032
+  1a:	0030                	.2byte	0x30
