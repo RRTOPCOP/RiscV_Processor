@@ -6,7 +6,7 @@
 `include "alu32_func.v"
 
 
-module ex(plusFour_out_data, pc_out_data, imm, reg_data1, reg_data2, funct3, jump, branch, alu_op, alu_src, jalr, pc_in_data, alu_out_data, plusOffset_out_data, zero, overflow)
+module ex(plusFour_out_data, pc_out_data, imm, reg_data1, reg_data2, funct3, jump, branch, alu_op, alu_src, jalr, pc_in_data, alu_out_data, plusOffset_out_data, pc_ctr, zero, overflow)
 
 input [31:0] plusFour_out_data;
 input [31:0] pc_out_data;
@@ -22,13 +22,13 @@ input alu_src;
 output [31:0] pc_in_data;             //to pc
 output [31:0] alu_out_data;           //to mem, wb
 output [31:0] plusOffset_out_data;    //to wb
+output pc_ctr;
 output zero;
 output overflow;
 
 wire [31:0] muxAlu_out_data;
 wire u_slt;
 wire s_slt;
-wire pc_ctr;
 wire [31:0] muxPcSrc_out_data;
 
 

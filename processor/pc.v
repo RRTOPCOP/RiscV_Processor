@@ -1,16 +1,21 @@
-module pc (pc_in_data, clk, rst, pc_out_data);
+module pc (pc_in_data, clk, rst, is_stall, pc_out_data);
 input [31:0] pc_in_data; //from mux_pcsrc
-input   clk; //top module
-input   rst; //top module
+input clk; //top module
+input rst; //top module
+input is_stall;
 // input   isload; //from decoder
 output reg [31:0] pc_out_data; //to order_mem
 
 // output reg load_cnt = 0;
 
 always @ (posedge clk or negedge rst) begin
-
-  pc_out_data <= pc_in_data;
-
+  if(~rst) begin
+    pc_out_data <= 32'b00000000000000010000000000000000;
+  end else if(is_stall) begin 
+    pc_out_data <= pc_out_data;
+  end else begin
+    pc_out_data <= pc_in_data;
+  end
 end
 
 
