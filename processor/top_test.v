@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-`define IN_TOTAL 1000000000
+`define IN_TOTAL 1000000
 `include "top.v"
 
 module top_test;
@@ -39,9 +39,23 @@ module top_test;
    wire [BIT_WIDTH-1:0] a5;
    wire [BIT_WIDTH-1:0] a4;
    wire [BIT_WIDTH-1:0] sp;
-   assign a5 =  u_top_1.register.u_DW_ram_2r_w_s_dff.mem[31+32*15:32*15];
-   assign a4 =  u_top_1.register.u_DW_ram_2r_w_s_dff.mem[31+32*14:32*14];
-   assign sp =  u_top_1.register.u_DW_ram_2r_w_s_dff.mem[31+32*2:32*2];
+   wire [BIT_WIDTH-1:0] s0;
+   wire [BIT_WIDTH-1:0] a0;
+   wire [BIT_WIDTH-1:0] ra;
+   wire [31:0] pcnext;
+   wire [31:0] exmem_pc_out;
+   wire [31:0] memwb_pc_out;
+
+   assign a5 =  u_top_1.u_id.register.u_DW_ram_2r_w_s_dff.mem[31+32*15:32*15];
+   assign a4 =  u_top_1.u_id.register.u_DW_ram_2r_w_s_dff.mem[31+32*14:32*14];
+   assign sp =  u_top_1.u_id.register.u_DW_ram_2r_w_s_dff.mem[31+32*2:32*2];
+   assign s0 =  u_top_1.u_id.register.u_DW_ram_2r_w_s_dff.mem[31+32*8:32*8];
+   assign a0 =  u_top_1.u_id.register.u_DW_ram_2r_w_s_dff.mem[31+32*10:32*10];
+   assign ra =  u_top_1.u_id.register.u_DW_ram_2r_w_s_dff.mem[31+32*1:32*1];
+   assign pcnext = u_top_1.exmem_pcnext_out;
+   assign exmem_pc_out = u_top_1.exmem_pc_out;
+   assign memwb_pc_out = u_top_1.memwb_pc_out;
+   
 
    integer              i;
    integer              CIL, CDLL, CDSL;  // counter for emulate memory access latency
@@ -124,7 +138,7 @@ module top_test;
 
    //*** description for wave form ***//
    initial begin
-      // $monitor($stime," PC=%h INST=%b a5=%h a4=%h sp=%h", IAD, IDT, a5, a4, sp);
+      // $monitor($stime," PC=%h a0=%h a5=%h a4=%h sp=%h s0=%h ra=%h", memwb_pc_out, a0, a5, a4, sp, s0, ra);
       //ここから2行はIcarus Verilog用(手元で動かすときに使ってください)
 	   $dumpfile("top_test.vcd");
       $dumpvars(0, u_top_1);
@@ -272,7 +286,7 @@ module top_test;
         Reg_data = $fopen("./Reg_out.dat");
         for (i =0; i < 32; i = i+1)  // output register to Reg_data (Reg_out.dat)
           begin
-             Reg_temp = u_top_1.register.u_DW_ram_2r_w_s_dff.mem >> (BIT_WIDTH * i);
+             Reg_temp = u_top_1.u_id.register.u_DW_ram_2r_w_s_dff.mem >> (BIT_WIDTH * i);
              $fwrite(Reg_data, "%d:%h\n", i, Reg_temp);
           end
         $fclose(Reg_data);

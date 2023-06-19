@@ -1,6 +1,6 @@
 `include "src_mem.v"
 
-module wb(opcode, mem_to_reg, plusOffset_out_data, imm, plusFour_out_data, mem_data, alu_out_data, srcMem_out_data)
+module wb(opcode, mem_to_reg, plusOffset_out_data, imm, plusFour_out_data, mem_data, alu_out_data, srcMem_out_data);
 
 input [6:0] opcode;
 input mem_to_reg;

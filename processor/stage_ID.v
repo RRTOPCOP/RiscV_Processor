@@ -1,7 +1,7 @@
 `include "rv32i_decoder.v"
 `include "rf32x32.v"
 
-module id(clk, rst, order_data, memwb_rd, memwb_regwrite, srcMem_out_data, imm, reg_data1, reg_data2, rs1, rs2, opcode, funct3, alu_op, alu_src, jump, mem_to_reg, mem_read, mem_write, branch, jalr, reg_write, decode_rd)
+module id(clk, rst, order_data, memwb_rd, memwb_regwrite, srcMem_out_data, imm, reg_data1, reg_data2, rs1, rs2, opcode, funct3, alu_op, alu_src, jump, mem_to_reg, mem_read, mem_write, branch, jalr, decode_reg_write, decode_rd);
 
 input clk;
 input rst;
@@ -45,14 +45,14 @@ decoder u_decoder (
   .funct7(funct7),
   .imm(imm),
   .alu_op(alu_op),
-  .reg_write(reg_write),
+  .reg_write(decode_reg_write),
   .alu_src(alu_src),
   .jump(jump),
   .mem_to_reg(mem_to_reg),
   .mem_read(mem_read),
   .mem_write(mem_write),
   .branch(branch),
-  .jalr(jalr),
+  .jalr(jalr)
 );
 
 

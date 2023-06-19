@@ -6,6 +6,7 @@
 `include "pr_IDEX.v"
 `include "pr_EXMEM.v"
 `include "pr_MEMWB.v"
+`include "hazard_ctr.v"
 
 
 module top (clk, rst, ACKD_n, ACKI_n, IDT, OINT_n, IAD, DAD, MREQ, WRITE, SIZE, IACK_n, DDT);
@@ -47,26 +48,46 @@ endfunction
 //hazard_ctr
 wire is_stall;
 wire is_flash;
-wire [31:0] forward_data;
-wire[1:0] regdata_ctr;
+wire pc_stall;
+wire [31:0] forward_data1;
+wire [31:0] forward_data2;
+wire regdata1_ctr;
+wire regdata2_ctr;
 
-hazard_ctr u_hazard_ctr(
-  .rs1(id_rs1_out),
-  .rs2(id_rs2_out),
-  .exmem_rd(idex_rd_out),
-  .memwb_rd(exmem_rd_out),
-  .exmem_opcode(idex_opcode_out),
-  .memwb_opcode(exmem_opcode_out),
-  .exmem_imm(idex_imm_out),
-  .exmem_pcPlusFour(idex_plusfour_out),
-  .exmem_pcPlusOffset(ex_plusimm_out),
-  .memwb_memdata(DDT),
+hazardCtr u_hazardCtr(
+  .clk(clk),
+  .id_rs1_out(id_rs1_out),
+  .id_rs2_out(id_rs2_out),
+  .idex_rd_out(idex_rd_out),
+  .exmem_rd_out(exmem_rd_out),
+  .id_opcode_out(id_opcode_out),
+  .idex_opcode_out(idex_opcode_out),
+  .exmem_opcode_out(exmem_opcode_out),
+  .idex_imm_out(idex_imm_out),
+  .exmem_imm_out(exmem_imm_out),
+  .idex_plusfour_out(idex_plusfour_out),
+  .exmem_plusfour_out(exmem_plusfour_out),
+  .ex_plusimm_out(ex_plusimm_out),
+  .exmem_plusimm_out(exmem_plusimm_out),
+  .ex_aluout_out(ex_aluout_out),
+  .exmem_aluout_out(exmem_aluout_out),
+  .DDT(DDT),
   .exmem_branch(idex_branch_out),
   .exmem_pcctr(ex_pcctr_out),
+  .ifid_pc_out(ifid_pc_out),
+  .id_jump_out(id_jump_out),
+  .id_jalr_out(id_jalr_out),
+  .idex_jump_out(idex_jump_out),
+  .idex_pc_out(idex_pc_out),
+  .exmem_pc_out(exmem_pc_out),
+  .idex_jalr_out(idex_jalr_out),
   .is_stall(is_stall),
   .is_flash(is_flash),
-  .forward_data(forward_data),
-  .regdata_ctr(regdata_ctr)
+  .pc_stall(pc_stall),
+  .forward_data1(forward_data1),
+  .forward_data2(forward_data2),
+  .regdata1_ctr(regdata1_ctr),
+  .regdata2_ctr(regdata2_ctr)
 );
 
 
@@ -79,11 +100,14 @@ if_stage u_if_stage(
   .clk(clk),
   .rst(rst),
   .is_stall(is_stall),
-  .pc_in_data(exmem_pcnext_out),
+  .ex_pcctr_out(ex_pcctr_out),
+  .pc_in_data(ex_pcnext_out),
   .plusFour_out_data(if_plusfour_out),
-  .order_data(if_order_out),
   .pc_out_data(if_pc_out)
 );
+
+assign IAD = if_pc_out;
+assign if_order_out = IDT;
 
 
 //IFID
@@ -108,6 +132,8 @@ ifid u_ifid(
 wire [31:0] id_imm_out;
 wire [31:0] id_regdata1_out;
 wire [31:0] id_regdata2_out;
+wire [4:0] id_rs1_out;
+wire [4:0] id_rs2_out;
 wire [6:0] id_opcode_out;
 wire [2:0] id_funct3_out;
 wire [2:0] id_aluop_out;
@@ -119,15 +145,14 @@ wire id_memread_out;
 wire id_memwrite_out;
 wire id_branch_out;
 wire id_jalr_out;
-wire id_regwrite_out;
-wire id_rd_out;
+wire [4:0]id_rd_out;
 
 id u_id(
   .clk(clk),
   .rst(rst),
   .order_data(ifid_order_out),
   .memwb_rd(memwb_rd_out),
-  .memwb_regwrite(memwb_regwirte_out),
+  .memwb_regwrite(memwb_regwrite_out),
   .srcMem_out_data(srcMem_out_data),
   .imm(id_imm_out),
   .reg_data1(id_regdata1_out),
@@ -136,15 +161,15 @@ id u_id(
   .rs2(id_rs2_out),
   .opcode(id_opcode_out),
   .funct3(id_funct3_out),
-  .aluop(id_aluop_out),
-  .alusrc(id_alusrc_out),
+  .alu_op(id_aluop_out),
+  .alu_src(id_alusrc_out),
   .jump(id_jump_out),
   .mem_to_reg(id_memtoreg_out),
   .mem_read(id_memread_out),
   .mem_write(id_memwrite_out),
   .branch(id_branch_out),
   .jalr(id_jalr_out),
-  .reg_write(id_regwrite_out),
+  .decode_reg_write(id_regwrite_out),
   .decode_rd(id_rd_out)
 );
 
@@ -192,8 +217,11 @@ idex u_idex(
   .idex_branch_in(id_branch_out),
   .idex_jalr_in(id_jalr_out),
   .is_flash(is_flash),
-  .forward_data(forward_data),
-  .regdata_ctr(regdata_ctr),
+  .is_stall(is_stall),
+  .forward_data1(forward_data1),
+  .forward_data2(forward_data2),
+  .regdata1_ctr(regdata1_ctr),
+  .regdata2_ctr(regdata2_ctr),
   .idex_pc_out(idex_pc_out),
   .idex_plusfour_out(idex_plusfour_out),
   .idex_regdata1_out(idex_regdata1_out),
@@ -226,7 +254,8 @@ wire overflow;
 
 ex u_ex(
   .plusFour_out_data(idex_plusfour_out),
-  .pc_out_data(idex_pc_out),
+  .idex_pc_out(idex_pc_out),
+  .ifid_pc_out(ifid_pc_out),
   .imm(idex_imm_out),
   .reg_data1(idex_regdata1_out),
   .reg_data2(idex_regdata2_out),
@@ -302,7 +331,6 @@ exmem u_exmem(
 
 //MEM
 assign DDT = exmem_regdata2_out; //write in mem
-assign IAD = exmem_pc_out;
 assign DAD = exmem_aluout_out;
 assign MREQ = exmem_memread_out || exmem_memwrite_out;
 assign WRITE = exmem_memwrite_out;
@@ -320,7 +348,7 @@ wire [31:0] memwb_aluout_out;
 wire [4:0] memwb_rd_out;
 wire memwb_regwrite_out;
 wire memwb_memtoreg_out;
-wire memwb_opcode_out;
+wire [6:0] memwb_opcode_out;
 
 memwb u_memwb(
   .clk(clk),

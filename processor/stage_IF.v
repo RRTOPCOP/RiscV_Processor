@@ -1,14 +1,14 @@
 `include "pc.v"
 `include "adder_pcPlusFour.v"
 
-module if_stage(clk, rst, is_stall, pc_in_data, plusFour_out_data, order_data, pc_out_data)
+module if_stage(clk, rst, is_stall, ex_pcctr_out, pc_in_data, plusFour_out_data, pc_out_data);
 
 input clk;
 input rst;
 input is_stall;
+input ex_pcctr_out;
 input [31:0] pc_in_data;
 output [31:0] plusFour_out_data;  //to ex, wb
-output [31:0] order_data;         //to id
 output [31:0] pc_out_data;        //to ex
 
 
@@ -17,6 +17,7 @@ pc u_pc (
   .pc_in_data(pc_in_data),
   .clk(clk),
   .rst(rst),
+  .pc_ctr(ex_pcctr_out),
   .is_stall(is_stall),
   .pc_out_data(pc_out_data)
 );

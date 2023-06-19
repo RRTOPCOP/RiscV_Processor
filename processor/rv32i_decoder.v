@@ -29,7 +29,7 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
 //controll signal
   assign alu_op = alu_ctr(opcode, funct3, funct7);
   assign imm = immidiate(opcode, instruction);
-  assign reg_write = regwrite(opcode);
+  assign reg_write = regwrite(rd, opcode);
   assign alu_src = alusrc(opcode);
   assign jump = (opcode == 7'b1101111); //jal
   assign mem_to_reg = memtoreg(opcode);
@@ -126,8 +126,10 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
 //function for reg_write
   function  regwrite;
 
+  input [4:0] rd;
   input [6:0] opcode;
 
+  if(rd != 5'b0)begin
     case(opcode)
     7'b0110011,                   //Rformat
     7'b0010011,                   //Iformat(immidiate)
@@ -138,6 +140,9 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
     7'b0010111: regwrite = 1;     //auipc
     default: regwrite = 0;
     endcase
+  end else begin
+    regwrite = 0;
+  end
 
   endfunction
 

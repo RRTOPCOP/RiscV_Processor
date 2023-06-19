@@ -6,17 +6,18 @@
 `include "alu32_func.v"
 
 
-module ex(plusFour_out_data, pc_out_data, imm, reg_data1, reg_data2, funct3, jump, branch, alu_op, alu_src, jalr, pc_in_data, alu_out_data, plusOffset_out_data, pc_ctr, zero, overflow)
+module ex(plusFour_out_data, idex_pc_out, ifid_pc_out, imm, reg_data1, reg_data2, funct3, jump, branch, alu_op, alu_src, jalr, pc_in_data, alu_out_data, plusOffset_out_data, pc_ctr, zero, overflow);
 
 input [31:0] plusFour_out_data;
-input [31:0] pc_out_data;
+input [31:0] idex_pc_out;
+input [31:0] ifid_pc_out;
 input [31:0] imm;
 input [31:0] reg_data1;
 input [31:0] reg_data2;
 input [2:0] funct3;
 input jump;
 input branch;
-input alu_op;
+input [2:0]alu_op;
 input jalr;
 input alu_src;
 output [31:0] pc_in_data;             //to pc
@@ -34,7 +35,7 @@ wire [31:0] muxPcSrc_out_data;
 
 //adder_pcPlusOffset
 adder_pcPlusOffset u_adder_pcPlusOffset (
-  .pc(pc_out_data),
+  .pc(idex_pc_out),
   .offset(imm),
   .plusOffset_out_data(plusOffset_out_data)
 );
@@ -63,6 +64,9 @@ alu u_alu (
 pc_src u_pc_src (
   .branch(branch),
   .jump(jump),
+  .jalr(jalr),
+  .ifid_pc_out(ifid_pc_out),
+  .idex_pc_out(idex_pc_out),
   .funct3(funct3),
   .zero(zero),
   .u_slt(u_slt),

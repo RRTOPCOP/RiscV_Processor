@@ -1,0 +1,131 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Mon Jun 19 07:25:10 2023
+[*]
+[dumpfile] "C:\Users\genta\Riscv_Processor\processor\top_test.vcd"
+[dumpfile_mtime] "Mon Jun 19 07:03:01 2023"
+[dumpfile_size] 19019719
+[savefile] "C:\Users\genta\Riscv_Processor\processor\default.gtkw"
+[timestart] 19721100
+[size] 1920 1057
+[pos] -1929 -9
+*-15.000000 19875200 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top_test.
+[treeopen] top_test.u_top_1.
+[treeopen] top_test.u_top_1.u_ex.
+[treeopen] top_test.u_top_1.u_ex.u_pc_src.
+[treeopen] top_test.u_top_1.u_hazardCtr.
+[treeopen] top_test.u_top_1.u_id.
+[treeopen] top_test.u_top_1.u_if_stage.
+[treeopen] top_test.u_top_1.u_wb.
+[sst_width] 197
+[signals_width] 308
+[sst_expanded] 1
+[sst_vpaned_height] 552
+@28
+top_test.u_top_1.clk
+top_test.u_top_1.rst
+top_test.u_top_1.is_stall
+top_test.u_top_1.is_flash
+@200
+-
+-
+@22
+top_test.u_top_1.if_pc_out[31:0]
+top_test.u_top_1.ifid_pc_out[31:0]
+top_test.u_top_1.idex_pc_out[31:0]
+top_test.u_top_1.exmem_pc_out[31:0]
+top_test.u_top_1.memwb_pc_out[31:0]
+@200
+-
+-
+-
+-
+-
+-
+-
+@22
+top_test.u_top_1.u_if_stage.u_pc.pc_in_data[31:0]
+top_test.u_top_1.u_if_stage.u_pc.pc_out_data[31:0]
+top_test.u_top_1.if_pc_out[31:0]
+@420
+top_test.u_top_1.u_if_stage.u_pc.stall_count
+@200
+-
+-
+-
+@23
+top_test.u_top_1.u_ifid.ifid_pc_out[31:0]
+@420
+top_test.u_top_1.u_ifid.stall_count
+@22
+top_test.u_top_1.u_ifid.ifid_order_out[31:0]
+top_test.u_top_1.id_regdata1_out[31:0]
+top_test.u_top_1.id_regdata2_out[31:0]
+top_test.u_top_1.id_rs1_out[4:0]
+top_test.u_top_1.id_rs2_out[4:0]
+top_test.u_top_1.id_rd_out[4:0]
+@200
+-
+-
+-
+@22
+top_test.u_top_1.u_idex.idex_pc_out[31:0]
+top_test.u_top_1.idex_rd_out[4:0]
+top_test.u_top_1.u_idex.idex_rs1_out[4:0]
+top_test.u_top_1.u_idex.idex_rs2_out[4:0]
+top_test.u_top_1.u_idex.idex_regdata1_in[31:0]
+top_test.u_top_1.u_idex.idex_regdata1_out[31:0]
+top_test.u_top_1.u_idex.idex_regdata2_in[31:0]
+top_test.u_top_1.u_idex.idex_regdata2_out[31:0]
+top_test.u_top_1.forward_data1[31:0]
+top_test.u_top_1.forward_data2[31:0]
+@28
+top_test.u_top_1.regdata1_ctr
+top_test.u_top_1.regdata2_ctr
+@22
+top_test.u_top_1.u_ex.u_alu.dataA[31:0]
+top_test.u_top_1.u_ex.u_alu.dataB[31:0]
+top_test.u_top_1.ex_pcnext_out[31:0]
+top_test.u_top_1.idex_opcode_out[6:0]
+@200
+-
+-
+-
+@22
+top_test.u_top_1.u_exmem.exmem_pc_out[31:0]
+@28
+top_test.u_top_1.WRITE
+top_test.u_top_1.MREQ
+@22
+top_test.u_top_1.DDT[31:0]
+top_test.u_top_1.DAD[31:0]
+top_test.u_top_1.exmem_aluout_out[31:0]
+top_test.u_top_1.u_exmem.exmem_rd_in[4:0]
+top_test.u_top_1.u_exmem.exmem_rd_out[4:0]
+top_test.u_top_1.exmem_opcode_out[6:0]
+@28
+top_test.u_top_1.ex_pcctr_out
+@22
+top_test.u_top_1.u_exmem.exmem_imm_in[31:0]
+top_test.u_top_1.u_exmem.exmem_imm_out[31:0]
+@200
+-
+-
+-
+@22
+top_test.u_top_1.u_memwb.memwb_pc_out[31:0]
+@28
+top_test.u_top_1.u_memwb.memwb_regwrite_out
+@22
+top_test.u_top_1.u_memwb.memwb_rd_out[4:0]
+top_test.u_top_1.srcMem_out_data[31:0]
+top_test.u_top_1.u_memwb.memwb_memdata_out[31:0]
+top_test.u_top_1.u_memwb.memwb_aluout_out[31:0]
+top_test.u_top_1.u_memwb.memwb_imm_out[31:0]
+top_test.u_top_1.u_memwb.memwb_memdata_out[31:0]
+top_test.u_top_1.u_memwb.memwb_plusfour_out[31:0]
+top_test.u_top_1.u_memwb.memwb_plusimm_out[31:0]
+top_test.u_top_1.u_wb.u_src_mem.opcode[6:0]
+[pattern_trace] 1
+[pattern_trace] 0

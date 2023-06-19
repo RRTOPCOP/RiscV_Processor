@@ -8,8 +8,7 @@ module alu (dataA, dataB, alu_op, alu_out_data, zero, overflow, u_slt, s_slt);
   assign zero = (alu_out_data == 32'b0);
   assign overflow = ((dataA[31] == dataB[31])&&(alu_out_data[31] != dataA[31]));
   assign u_slt = ((alu_op == 3'b001)&&(dataA < dataB));
-  assign s_slt = (alu_op == 3'b001)&&((dataA[31] == dataB[31]) ? u_slt : ~u_slt);
-
+  assign s_slt = (alu_op == 3'b001)&&((dataA[31] == dataB[31]) ? u_slt : ~u_slt); 
 
   //function for alu_out_data
   function [31:0] result;
