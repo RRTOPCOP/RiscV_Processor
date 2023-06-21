@@ -41,10 +41,7 @@ function [1:0] size;
 endfunction
 
 
-
-
-//*** modules ***//
-
+//variable definition
 //hazard_ctr
 wire is_stall;
 wire is_flash;
@@ -53,7 +50,97 @@ wire [31:0] forward_data1;
 wire [31:0] forward_data2;
 wire regdata1_ctr;
 wire regdata2_ctr;
+//IF
+wire [31:0] if_plusfour_out;
+wire [31:0] if_order_out;
+wire [31:0] if_pc_out;
+//IFID
+wire [31:0] ifid_order_out;
+wire [31:0] ifid_pc_out;
+wire [31:0] ifid_plusfour_out;
+//ID
+wire [31:0] id_imm_out;
+wire [31:0] id_regdata1_out;
+wire [31:0] id_regdata2_out;
+wire [4:0] id_rs1_out;
+wire [4:0] id_rs2_out;
+wire [6:0] id_opcode_out;
+wire [2:0] id_funct3_out;
+wire [2:0] id_aluop_out;
+wire id_alusrc_out;
+wire id_jump_out;
+wire id_regwrite_out;
+wire id_memtoreg_out;
+wire id_memread_out;
+wire id_memwrite_out;
+wire id_branch_out;
+wire id_jalr_out;
+wire [4:0]id_rd_out;
+//IDEX
+wire [31:0] idex_pc_out;
+wire [31:0] idex_plusfour_out;
+wire [31:0] idex_regdata1_out;
+wire [31:0] idex_regdata2_out;
+wire [31:0] idex_imm_out;
+wire [4:0] idex_rs1_out;
+wire [4:0] idex_rs2_out;
+wire [4:0] idex_rd_out;
+wire [6:0] idex_opcode_out;
+wire [2:0] idex_funct3_out;
+wire [2:0] idex_aluop_out;
+wire idex_alusrc_out;
+wire idex_regwrite_out;
+wire idex_jump_out;
+wire idex_memtoreg_out;
+wire idex_memread_out;
+wire idex_memwrite_out;
+wire idex_branch_out;
+wire idex_jalr_out;
+//EX
+wire [31:0] ex_pcnext_out;
+wire [31:0] ex_aluout_out;
+wire [31:0] ex_plusimm_out;
+wire ex_pcctr_out;
+wire zero;
+wire overflow;
+//EXMEM
+wire [31:0] exmem_pc_out;
+wire [31:0] exmem_pcnext_out;
+wire [31:0] exmem_aluout_out;
+wire [31:0] exmem_imm_out;
+wire [31:0] exmem_regdata2_out;
+wire [31:0] exmem_plusfour_out;
+wire [31:0] exmem_plusimm_out;
+wire [4:0] exmem_rd_out;
+wire exmem_regwrite_out;
+wire exmem_memtoreg_out;
+wire [6:0] exmem_opcode_out;
+wire [2:0] exmem_funct3_out;
+wire exmem_memwrite_out;
+wire exmem_memread_out;
+wire exmem_branch_out;
+wire exmem_pcctr_out;
+//MEMWB
+wire [31:0] memwb_pc_out;
+wire [31:0] memwb_memdata_out;
+wire [31:0] memwb_plusfour_out;
+wire [31:0] memwb_plusimm_out;
+wire [31:0] memwb_imm_out;
+wire [31:0] memwb_aluout_out;
+wire [4:0] memwb_rd_out;
+wire memwb_regwrite_out;
+wire memwb_memtoreg_out;
+wire [6:0] memwb_opcode_out;
+//WB
+wire [31:0] srcMem_out_data;
 
+
+
+
+//*** modules ***//
+
+
+//Hazard
 hazardCtr u_hazardCtr(
   .clk(clk),
   .id_rs1_out(id_rs1_out),
@@ -92,10 +179,6 @@ hazardCtr u_hazardCtr(
 
 
 //IF
-wire [31:0] if_plusfour_out;
-wire [31:0] if_order_out;
-wire [31:0] if_pc_out;
-
 if_stage u_if_stage(
   .clk(clk),
   .rst(rst),
@@ -109,12 +192,7 @@ if_stage u_if_stage(
 assign IAD = if_pc_out;
 assign if_order_out = IDT;
 
-
-//IFID
-wire [31:0] ifid_order_out;
-wire [31:0] ifid_pc_out;
-wire [31:0] ifid_plusfour_out;
-
+//IF
 ifid u_ifid(
   .clk(clk),
   .ifid_order_in(if_order_out),
@@ -127,26 +205,7 @@ ifid u_ifid(
   .ifid_plusfour_out(ifid_plusfour_out)
 );
 
-
 //ID
-wire [31:0] id_imm_out;
-wire [31:0] id_regdata1_out;
-wire [31:0] id_regdata2_out;
-wire [4:0] id_rs1_out;
-wire [4:0] id_rs2_out;
-wire [6:0] id_opcode_out;
-wire [2:0] id_funct3_out;
-wire [2:0] id_aluop_out;
-wire id_alusrc_out;
-wire id_jump_out;
-wire id_regwrite_out;
-wire id_memtoreg_out;
-wire id_memread_out;
-wire id_memwrite_out;
-wire id_branch_out;
-wire id_jalr_out;
-wire [4:0]id_rd_out;
-
 id u_id(
   .clk(clk),
   .rst(rst),
@@ -173,28 +232,7 @@ id u_id(
   .decode_rd(id_rd_out)
 );
 
-
 //IDEX
-wire [31:0] idex_pc_out;
-wire [31:0] idex_plusfour_out;
-wire [31:0] idex_regdata1_out;
-wire [31:0] idex_regdata2_out;
-wire [31:0] idex_imm_out;
-wire [4:0] idex_rs1_out;
-wire [4:0] idex_rs2_out;
-wire [4:0] idex_rd_out;
-wire [6:0] idex_opcode_out;
-wire [2:0] idex_funct3_out;
-wire [2:0] idex_aluop_out;
-wire idex_alusrc_out;
-wire idex_regwrite_out;
-wire idex_jump_out;
-wire idex_memtoreg_out;
-wire idex_memread_out;
-wire idex_memwrite_out;
-wire idex_branch_out;
-wire idex_jalr_out;
-
 idex u_idex(
   .clk(clk),
   .idex_pc_in(ifid_pc_out),
@@ -243,15 +281,7 @@ idex u_idex(
   .idex_jalr_out(idex_jalr_out)
   );
 
-
 //EX
-wire [31:0] ex_pcnext_out;
-wire [31:0] ex_aluout_out;
-wire [31:0] ex_plusimm_out;
-wire ex_pcctr_out;
-wire zero;
-wire overflow;
-
 ex u_ex(
   .plusFour_out_data(idex_plusfour_out),
   .idex_pc_out(idex_pc_out),
@@ -273,25 +303,7 @@ ex u_ex(
   .overflow(overflow)
 );
 
-
 //EXMEM
-wire [31:0] exmem_pc_out;
-wire [31:0] exmem_pcnext_out;
-wire [31:0] exmem_aluout_out;
-wire [31:0] exmem_imm_out;
-wire [31:0] exmem_regdata2_out;
-wire [31:0] exmem_plusfour_out;
-wire [31:0] exmem_plusimm_out;
-wire [4:0] exmem_rd_out;
-wire exmem_regwrite_out;
-wire exmem_memtoreg_out;
-wire [6:0] exmem_opcode_out;
-wire [2:0] exmem_funct3_out;
-wire exmem_memwrite_out;
-wire exmem_memread_out;
-wire exmem_branch_out;
-wire exmem_pcctr_out;
-
 exmem u_exmem(
   .clk(clk),
   .exmem_pc_in(idex_pc_out),
@@ -337,19 +349,7 @@ assign WRITE = exmem_memwrite_out;
 assign IACK_n = 1;
 assign SIZE = size(exmem_funct3_out);
 
-
 //MEMWB
-wire [31:0] memwb_pc_out;
-wire [31:0] memwb_memdata_out;
-wire [31:0] memwb_plusfour_out;
-wire [31:0] memwb_plusimm_out;
-wire [31:0] memwb_imm_out;
-wire [31:0] memwb_aluout_out;
-wire [4:0] memwb_rd_out;
-wire memwb_regwrite_out;
-wire memwb_memtoreg_out;
-wire [6:0] memwb_opcode_out;
-
 memwb u_memwb(
   .clk(clk),
   .memwb_pc_in(exmem_pc_out),
@@ -374,10 +374,7 @@ memwb u_memwb(
   .memwb_opcode_out(memwb_opcode_out)
 );
 
-
 //WB
-wire [31:0] srcMem_out_data;
-
 wb u_wb(
   .opcode(memwb_opcode_out),
   .mem_to_reg(memwb_memtoreg_out),

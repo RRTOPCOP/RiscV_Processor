@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-`define IN_TOTAL 1000000
+`define IN_TOTAL 1000000000000
 `include "top.v"
 
 module top_test;
@@ -143,8 +143,8 @@ module top_test;
 	   $dumpfile("top_test.vcd");
       $dumpvars(0, u_top_1);
 	//   ここから2行はNC-Verilog用(woodblockで動かすときに使ってください)
-      //$shm_open("waves.shm");
-      //$shm_probe("AS");
+      // $shm_open("waves.shm");
+      // $shm_probe("AS");
    end
 
 

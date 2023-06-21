@@ -7,7 +7,7 @@ input is_stall;
 
 integer stall_count = 0;
 
-output reg [31:0] pc_out_data = 32'b0; //to order_mem
+output reg [31:0] pc_out_data; //to order_mem
 
 
 always @ (posedge clk or negedge rst) begin

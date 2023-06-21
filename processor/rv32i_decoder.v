@@ -28,7 +28,7 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
 
 //controll signal
   assign alu_op = alu_ctr(opcode, funct3, funct7);
-  assign imm = immidiate(opcode, instruction);
+  assign imm = immidiate(opcode, funct3, instruction);
   assign reg_write = regwrite(rd, opcode);
   assign alu_src = alusrc(opcode);
   assign jump = (opcode == 7'b1101111); //jal
@@ -42,15 +42,22 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
 
 
 //function for imm
-  function [32:0] immidiate;
+  function [31:0] immidiate;
 
   input [6:0] opcode;
+  input [2:0] funct3;
   input [31:0] instruction;
 
   case(opcode)
-    //Iformat
+    7'b0010011: begin
+    if((funct3 == 3'b101) || (funct3 == 3'b001))begin
+      immidiate = instruction[24:20];
+    end else begin
+      immidiate = $signed(instruction[31:20]);
+    end 
+    end
+
     7'b0000011,                                     //lw
-    7'b0010011,                                     //immidiate
     7'b1100111: immidiate = $signed(instruction[31:20]);      //jalr
     7'b1101111: immidiate = $signed({instruction[31], instruction[19:12], instruction[20], instruction[30:21], 1'b0});     //jal
     //Uformat
@@ -59,6 +66,7 @@ module decoder (instruction, opcode, funct3, rd, rs1, rs2, funct7, imm, alu_op, 
     //Bformat,Sformat
     7'b0100011: immidiate = $signed({instruction[31:25], instruction[11:7]});
     7'b1100011: immidiate = $signed({instruction[31], instruction[7], instruction[30:25], instruction[11:8], 1'b0});
+    default: immidiate = 32'b0;
 
   endcase
 

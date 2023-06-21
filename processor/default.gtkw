@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Mon Jun 19 07:25:10 2023
+[*] Wed Jun 21 07:35:36 2023
 [*]
 [dumpfile] "C:\Users\genta\Riscv_Processor\processor\top_test.vcd"
-[dumpfile_mtime] "Mon Jun 19 07:03:01 2023"
-[dumpfile_size] 19019719
+[dumpfile_mtime] "Wed Jun 21 07:32:59 2023"
+[dumpfile_size] 90409
 [savefile] "C:\Users\genta\Riscv_Processor\processor\default.gtkw"
-[timestart] 19721100
-[size] 1920 1057
-[pos] -1929 -9
-*-15.000000 19875200 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 0
+[size] 1284 701
+[pos] -1 -1
+*-15.000000 15200 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] top_test.
 [treeopen] top_test.u_top_1.
 [treeopen] top_test.u_top_1.u_ex.
@@ -21,7 +21,7 @@
 [sst_width] 197
 [signals_width] 308
 [sst_expanded] 1
-[sst_vpaned_height] 552
+[sst_vpaned_height] 424
 @28
 top_test.u_top_1.clk
 top_test.u_top_1.rst
@@ -54,7 +54,7 @@ top_test.u_top_1.u_if_stage.u_pc.stall_count
 -
 -
 -
-@23
+@22
 top_test.u_top_1.u_ifid.ifid_pc_out[31:0]
 @420
 top_test.u_top_1.u_ifid.stall_count
@@ -62,9 +62,12 @@ top_test.u_top_1.u_ifid.stall_count
 top_test.u_top_1.u_ifid.ifid_order_out[31:0]
 top_test.u_top_1.id_regdata1_out[31:0]
 top_test.u_top_1.id_regdata2_out[31:0]
+@23
 top_test.u_top_1.id_rs1_out[4:0]
+@22
 top_test.u_top_1.id_rs2_out[4:0]
 top_test.u_top_1.id_rd_out[4:0]
+top_test.u_top_1.id_imm_out[31:0]
 @200
 -
 -
